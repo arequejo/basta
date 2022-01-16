@@ -9,7 +9,10 @@ type BoardProps = {
 
 export default function Board({ current, board, onToggleEnabled }: BoardProps) {
   return (
-    <main className="p-4 grid grid-cols-2 gap-4 shadow rounded bg-white">
+    <main
+      className="p-4 grid grid-cols-2 gap-4 shadow rounded bg-white"
+      data-testid="board"
+    >
       <span
         className="self-center justify-self-center text-9xl uppercase"
         data-testid="current-character"
