@@ -2,6 +2,10 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
 
+vi.mock('./utils/alphabet.ts', () => ({
+  characters: ['a', 'b', 'c', 'd', 'e'],
+}));
+
 vi.mock('./utils/random.ts', () => ({
   getRandomNumber: vi.fn().mockImplementation(() => 0),
 }));
@@ -9,20 +13,6 @@ vi.mock('./utils/random.ts', () => ({
 describe('<App />', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  it('can perform letters selection', async () => {
-    const user = userEvent.setup();
-    render(<App />);
-
-    const aButton = screen.getByRole('button', { name: /^a$/i });
-    expect(aButton).toHaveAttribute('data-selected', 'true');
-    await user.click(aButton);
-    expect(aButton).toHaveAttribute('data-selected', 'false');
-
-    const resetButton = screen.getByRole('button', { name: /reset/i });
-    await user.click(resetButton);
-    expect(aButton).toHaveAttribute('data-selected', 'true');
   });
 
   it('can play the game', async () => {
@@ -38,11 +28,29 @@ describe('<App />', () => {
     expect(currentCharacter).toHaveTextContent(/^a$/i);
 
     const pickNextButton = screen.getByRole('button', { name: /pick next/i });
-    await userEvent.click(pickNextButton);
-    expect(currentCharacter).toHaveTextContent(/^b$/i);
+    await userEvent.click(pickNextButton); // 'b'
+    await userEvent.click(pickNextButton); // 'c'
+    await userEvent.click(pickNextButton); // 'd'
+    expect(pickNextButton).not.toBeInTheDocument();
+    expect(currentCharacter).toHaveTextContent(/^d$/i);
 
     const resetButton = screen.getByRole('button', { name: /reset/i });
     await userEvent.click(resetButton);
     expect(currentCharacter).toHaveTextContent('--');
+    expect(screen.getByRole('button', { name: /start/i })).toBeInTheDocument();
+  });
+
+  it('can perform letters selection', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const aButton = screen.getByRole('button', { name: /^a$/i });
+    expect(aButton).toHaveAttribute('data-enabled', 'true');
+    await user.click(aButton);
+    expect(aButton).toHaveAttribute('data-enabled', 'false');
+
+    const resetButton = screen.getByRole('button', { name: /reset/i });
+    await user.click(resetButton);
+    expect(aButton).toHaveAttribute('data-enabled', 'true');
   });
 });
