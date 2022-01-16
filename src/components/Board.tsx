@@ -29,7 +29,7 @@ export default function Board({ current, board, onToggleEnabled }: BoardProps) {
                 letter.hasBeenPicked && letter.character === current,
             })}
             onClick={() => onToggleEnabled(letter.character)}
-            data-selected={letter.isEnabled}
+            data-enabled={letter.isEnabled}
           >
             {letter.character}
           </button>

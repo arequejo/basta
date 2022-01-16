@@ -48,6 +48,15 @@ const boardMachine = createMachine<BoardContext, BoardEvent>(
         },
       },
       playing: {
+        always: [
+          {
+            target: 'finished',
+            cond: (context) =>
+              context.board.filter(
+                (letter) => letter.isEnabled && !letter.hasBeenPicked
+              ).length < 2,
+          },
+        ],
         entry: assign((context) => {
           const [nextCharacter, newBoard] = pickNextCharacter(context.board);
           return { board: newBoard, current: nextCharacter };
@@ -55,11 +64,12 @@ const boardMachine = createMachine<BoardContext, BoardEvent>(
         on: {
           PICK: { target: 'playing' },
           RESET: { target: 'new', actions: 'resetBoard' },
-          END: { target: 'ended' },
         },
       },
-      ended: {
-        type: 'final',
+      finished: {
+        on: {
+          RESET: { target: 'new', actions: 'resetBoard' },
+        },
       },
     },
   },
