@@ -19,6 +19,12 @@ const resetBoard = assign<BoardContext, BoardEvent>({
   current: null,
 });
 
+/**
+ * TODO
+ * - Add delayed `picking` state. The tests hang with `vi.useFakeTimers()` and
+ * can't get them to play nice without actually waiting for the delay to
+ * complete. Add such state once those issues have been resolved.
+ */
 const boardMachine = createMachine<BoardContext, BoardEvent>(
   {
     id: 'board',
