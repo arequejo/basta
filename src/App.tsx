@@ -1,32 +1,35 @@
 import React from 'react';
-import { Board } from './components';
+import { useMachine } from '@xstate/react';
+import { Board, Button } from './components';
+import boardMachine from './machine';
 import { Character } from './types';
-import { initBoard } from './utils/board';
 
 export default function App() {
-  const [board, setBoard] = React.useState(() => initBoard());
+  const [state, send] = useMachine(boardMachine);
 
-  const handleToggleEnabled = React.useCallback((character: Character) => {
-    setBoard((prevBoard) =>
-      prevBoard.map((letter) =>
-        letter.character === character
-          ? { ...letter, isEnabled: !letter.isEnabled }
-          : letter
-      )
-    );
-  }, []);
+  const handleToggleEnabled = React.useCallback(
+    (character: Character) => {
+      send({ type: 'SELECT', character });
+    },
+    [send]
+  );
 
   return (
     <>
-      <Board board={board} onToggleEnabled={handleToggleEnabled} />
+      <Board
+        current={state.context.current}
+        board={state.context.board}
+        onToggleEnabled={handleToggleEnabled}
+      />
 
-      <div className="flex justify-end mt-4">
-        <button
-          className="px-8 py-2 bg-blue-500 text-white rounded shadow"
-          onClick={() => setBoard(initBoard())}
-        >
-          Reset
-        </button>
+      <div className="flex justify-end mt-4 space-x-4">
+        <Button onClick={() => send('RESET')}>Reset</Button>
+        {state.matches('new') && (
+          <Button onClick={() => send('START')}>Start</Button>
+        )}
+        {state.matches('playing') && (
+          <Button onClick={() => send('PICK')}>Pick next</Button>
+        )}
       </div>
     </>
   );

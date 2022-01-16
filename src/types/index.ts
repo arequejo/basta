@@ -29,4 +29,5 @@ export type Character =
 export type Letter = {
   character: Character;
   isEnabled: boolean;
+  hasBeenPicked: boolean;
 };
