@@ -14,6 +14,11 @@ export default function App() {
     [send]
   );
 
+  const enabledCharactersCount = React.useMemo(
+    () => state.context.board.filter((letter) => letter.isEnabled).length,
+    [state.context.board]
+  );
+
   return (
     <>
       <Board
@@ -25,7 +30,12 @@ export default function App() {
       <div className="flex justify-end mt-4 space-x-4">
         <Button onClick={() => send('RESET')}>Reset</Button>
         {state.matches('new') && (
-          <Button onClick={() => send('START')}>Start</Button>
+          <Button
+            onClick={() => send('START')}
+            disabled={enabledCharactersCount < 2}
+          >
+            Start
+          </Button>
         )}
         {state.matches('playing') && (
           <Button onClick={() => send('PICK')}>Pick next</Button>

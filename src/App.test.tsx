@@ -1,9 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
 
 vi.mock('./utils/alphabet.ts', () => ({
-  characters: ['a', 'b', 'c', 'd', 'e'],
+  characters: ['a', 'b', 'c'],
 }));
 
 vi.mock('./utils/random.ts', () => ({
@@ -29,10 +29,8 @@ describe('<App />', () => {
 
     const pickNextButton = screen.getByRole('button', { name: /pick next/i });
     await userEvent.click(pickNextButton); // 'b'
-    await userEvent.click(pickNextButton); // 'c'
-    await userEvent.click(pickNextButton); // 'd'
     expect(pickNextButton).not.toBeInTheDocument();
-    expect(currentCharacter).toHaveTextContent(/^d$/i);
+    expect(currentCharacter).toHaveTextContent(/^b$/i);
 
     const resetButton = screen.getByRole('button', { name: /reset/i });
     await userEvent.click(resetButton);
@@ -44,13 +42,24 @@ describe('<App />', () => {
     const user = userEvent.setup();
     render(<App />);
 
+    const startButton = screen.getByRole('button', { name: /start/i });
+    expect(startButton).toBeEnabled();
+
     const aButton = screen.getByRole('button', { name: /^a$/i });
     expect(aButton).toHaveAttribute('data-enabled', 'true');
     await user.click(aButton);
     expect(aButton).toHaveAttribute('data-enabled', 'false');
 
+    await user.click(screen.getByRole('button', { name: /^b$/i }));
+    expect(startButton).toBeDisabled();
+
     const resetButton = screen.getByRole('button', { name: /reset/i });
     await user.click(resetButton);
-    expect(aButton).toHaveAttribute('data-enabled', 'true');
+
+    const board = screen.getByTestId('board');
+    const characterButtons = within(board).getAllByRole('button');
+    characterButtons.forEach((characterButton) => {
+      expect(characterButton).toHaveAttribute('data-enabled', 'true');
+    });
   });
 });
