@@ -44,7 +44,12 @@ const boardMachine = createMachine<BoardContext, BoardEvent>(
             }),
           },
           RESET: { actions: 'resetBoard' },
-          START: { target: 'playing' },
+          START: { target: 'picking' },
+        },
+      },
+      picking: {
+        after: {
+          2000: { target: 'playing' },
         },
       },
       playing: {
@@ -62,7 +67,7 @@ const boardMachine = createMachine<BoardContext, BoardEvent>(
           return { board: newBoard, current: nextCharacter };
         }),
         on: {
-          PICK: { target: 'playing' },
+          PICK: { target: 'picking' },
           RESET: { target: 'new', actions: 'resetBoard' },
         },
       },
