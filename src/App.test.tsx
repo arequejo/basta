@@ -12,34 +12,35 @@ vi.mock('./utils/random.ts', () => ({
 
 describe('<App />', () => {
   beforeEach(() => {
+    vi.useFakeTimers();
     vi.clearAllMocks();
   });
 
-  it('can play the game', async () => {
-    const user = userEvent.setup();
+  it('can play the game', () => {
     render(<App />);
 
     const currentCharacter = screen.getByTestId('current-character');
     expect(currentCharacter).toHaveTextContent('--');
 
     const startButton = screen.getByRole('button', { name: /start/i });
-    await user.click(startButton);
+    userEvent.click(startButton);
+    vi.runOnlyPendingTimers();
     expect(startButton).not.toBeInTheDocument();
     expect(currentCharacter).toHaveTextContent(/^a$/i);
 
     const pickNextButton = screen.getByRole('button', { name: /pick next/i });
-    await userEvent.click(pickNextButton); // 'b'
+    userEvent.click(pickNextButton); // 'b'
+    vi.runOnlyPendingTimers();
     expect(pickNextButton).not.toBeInTheDocument();
     expect(currentCharacter).toHaveTextContent(/^b$/i);
 
     const resetButton = screen.getByRole('button', { name: /reset/i });
-    await userEvent.click(resetButton);
+    userEvent.click(resetButton);
     expect(currentCharacter).toHaveTextContent('--');
     expect(screen.getByRole('button', { name: /start/i })).toBeInTheDocument();
   });
 
-  it('can perform letters selection', async () => {
-    const user = userEvent.setup();
+  it('can perform letters selection', () => {
     render(<App />);
 
     const startButton = screen.getByRole('button', { name: /start/i });
@@ -47,14 +48,14 @@ describe('<App />', () => {
 
     const aButton = screen.getByRole('button', { name: /^a$/i });
     expect(aButton).toHaveAttribute('data-enabled', 'true');
-    await user.click(aButton);
+    userEvent.click(aButton);
     expect(aButton).toHaveAttribute('data-enabled', 'false');
 
-    await user.click(screen.getByRole('button', { name: /^b$/i }));
+    userEvent.click(screen.getByRole('button', { name: /^b$/i }));
     expect(startButton).toBeDisabled();
 
     const resetButton = screen.getByRole('button', { name: /reset/i });
-    await user.click(resetButton);
+    userEvent.click(resetButton);
 
     const board = screen.getByTestId('board');
     const characterButtons = within(board).getAllByRole('button');
