@@ -7,7 +7,7 @@ const Button = React.forwardRef<
 >(({ className = '', ...props }, forwardedRef) => (
   <button
     className={clsx(
-      'px-8 py-2 bg-blue-500 text-white rounded shadow disabled:cursor-not-allowed disabled:bg-blue-300',
+      'rounded bg-blue-500 px-8 py-2 text-white shadow disabled:cursor-not-allowed disabled:bg-blue-300',
       className
     )}
     {...props}
