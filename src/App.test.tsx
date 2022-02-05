@@ -20,12 +20,15 @@ describe('<App />', () => {
     render(<App />);
 
     const currentCharacter = screen.getByTestId('current-character');
-    expect(currentCharacter).toHaveTextContent('--');
-
+    const resetButton = screen.getByRole('button', { name: /reset/i });
     const startButton = screen.getByRole('button', { name: /start/i });
+
+    expect(currentCharacter).toHaveTextContent('--');
     userEvent.click(startButton);
+    expect(resetButton).toBeDisabled();
     vi.runOnlyPendingTimers();
     expect(startButton).not.toBeInTheDocument();
+    expect(resetButton).toBeEnabled();
     expect(currentCharacter).toHaveTextContent(/^a$/i);
 
     const pickNextButton = screen.getByRole('button', { name: /pick next/i });
@@ -34,13 +37,12 @@ describe('<App />', () => {
     expect(pickNextButton).not.toBeInTheDocument();
     expect(currentCharacter).toHaveTextContent(/^b$/i);
 
-    const resetButton = screen.getByRole('button', { name: /reset/i });
     userEvent.click(resetButton);
     expect(currentCharacter).toHaveTextContent('--');
     expect(screen.getByRole('button', { name: /start/i })).toBeInTheDocument();
   });
 
-  it('can perform letters selection', () => {
+  it('can perform letters selection before the game starts', () => {
     render(<App />);
 
     const startButton = screen.getByRole('button', { name: /start/i });

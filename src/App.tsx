@@ -19,6 +19,10 @@ export default function App() {
     [state.context.board]
   );
 
+  const isNewGame = state.matches('new');
+  const isPlaying = state.matches('playing');
+  const isPicking = state.matches('picking');
+
   return (
     <>
       <Board
@@ -28,18 +32,18 @@ export default function App() {
       />
 
       <div className="mt-4 flex justify-end space-x-4">
-        <Button onClick={() => send('RESET')}>Reset</Button>
-        {state.matches('new') && (
+        <Button disabled={isPicking} onClick={() => send('RESET')}>
+          Reset
+        </Button>
+        {isNewGame && (
           <Button
-            onClick={() => send('START')}
             disabled={enabledCharactersCount < 2}
+            onClick={() => send('START')}
           >
             Start
           </Button>
         )}
-        {state.matches('playing') && (
-          <Button onClick={() => send('PICK')}>Pick next</Button>
-        )}
+        {isPlaying && <Button onClick={() => send('PICK')}>Pick next</Button>}
       </div>
     </>
   );
