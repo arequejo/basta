@@ -10,7 +10,7 @@ type BoardProps = {
 export default function Board({ current, board, onToggleEnabled }: BoardProps) {
   return (
     <main
-      className="p-4 grid grid-cols-2 gap-4 shadow rounded bg-white"
+      className="grid grid-cols-2 gap-4 rounded bg-white p-4 shadow"
       data-testid="board"
     >
       <span
@@ -24,7 +24,7 @@ export default function Board({ current, board, onToggleEnabled }: BoardProps) {
           <button
             key={letter.character}
             className={clsx({
-              'p-2 uppercase rounded bg-blue-200 shadow': true,
+              'rounded bg-blue-200 p-2 uppercase shadow': true,
               'bg-gray-100': !letter.isEnabled,
               'bg-blue-50':
                 letter.hasBeenPicked && letter.character !== current,
