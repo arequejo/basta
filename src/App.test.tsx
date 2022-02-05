@@ -49,9 +49,9 @@ describe('<App />', () => {
     expect(startButton).toBeEnabled();
 
     const aButton = screen.getByRole('button', { name: /^a$/i });
-    expect(aButton).toHaveAttribute('data-enabled', 'true');
+    expect(aButton).toHaveAttribute('aria-pressed', 'false');
     userEvent.click(aButton);
-    expect(aButton).toHaveAttribute('data-enabled', 'false');
+    expect(aButton).toHaveAttribute('aria-pressed', 'true');
 
     userEvent.click(screen.getByRole('button', { name: /^b$/i }));
     expect(startButton).toBeDisabled();
@@ -62,7 +62,7 @@ describe('<App />', () => {
     const board = screen.getByTestId('board');
     const characterButtons = within(board).getAllByRole('button');
     characterButtons.forEach((characterButton) => {
-      expect(characterButton).toHaveAttribute('data-enabled', 'true');
+      expect(characterButton).toHaveAttribute('aria-pressed', 'false');
     });
   });
 });
