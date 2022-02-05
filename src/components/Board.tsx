@@ -1,13 +1,20 @@
 import clsx from 'clsx';
+import { Button } from '.';
 import { Character, Letter } from '../types';
 
 type BoardProps = {
+  isPlaying: boolean;
   current: Character | null;
   board: Letter[];
   onToggleEnabled: (character: Character) => void;
 };
 
-export default function Board({ current, board, onToggleEnabled }: BoardProps) {
+export default function Board({
+  isPlaying,
+  current,
+  board,
+  onToggleEnabled,
+}: BoardProps) {
   return (
     <main
       className="grid grid-cols-2 gap-4 rounded bg-white p-4 shadow"
@@ -20,22 +27,18 @@ export default function Board({ current, board, onToggleEnabled }: BoardProps) {
         {current ?? '--'}
       </span>
       <div className="grid grid-cols-5 gap-4">
-        {board.map((letter) => (
-          <button
-            key={letter.character}
-            className={clsx({
-              'rounded bg-blue-200 p-2 uppercase shadow': true,
-              'bg-gray-100': !letter.isEnabled,
-              'bg-blue-50':
-                letter.hasBeenPicked && letter.character !== current,
-              'bg-blue-400':
-                letter.hasBeenPicked && letter.character === current,
-            })}
-            onClick={() => onToggleEnabled(letter.character)}
-            aria-pressed={!letter.isEnabled}
+        {board.map(({ character, isEnabled, hasBeenPicked }) => (
+          <Button
+            key={character}
+            variant="letter"
+            data-current={character === current}
+            data-past={hasBeenPicked && character !== current}
+            aria-pressed={!isEnabled}
+            disabled={isPlaying}
+            onClick={() => onToggleEnabled(character)}
           >
-            {letter.character}
-          </button>
+            {character}
+          </Button>
         ))}
       </div>
     </main>
