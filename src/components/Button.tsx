@@ -19,7 +19,7 @@ export default React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(
     <button
       ref={forwardedRef}
       className={clsx({
-        'group cursor-pointer rounded-lg border-0 bg-blue-800 p-0 outline-offset-4 transition-transform disabled:cursor-not-allowed disabled:opacity-70 pressed:bg-gray-300 current:scale-110 current:bg-green-800 past:bg-blue-300':
+        'group cursor-pointer rounded-lg border-0 bg-blue-800 p-0 outline-offset-4 transition-transform disabled:cursor-not-allowed disabled:opacity-70 pressed:bg-gray-300 current:scale-125 current:bg-green-800 past:bg-blue-300':
           true,
         'disabled:opacity-100': isLetterVariant,
       })}
@@ -29,7 +29,7 @@ export default React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(
         className={clsx({
           'block -translate-y-[6px] rounded-lg bg-blue-600 px-8 py-2 text-lg text-white group-active:-translate-y-[2px]':
             true,
-          'px-2 uppercase group-pressed:-translate-y-[2px] group-pressed:bg-gray-100 group-pressed:text-gray-600 group-current:bg-green-600 group-past:-translate-y-[2px] group-past:bg-blue-100 group-past:text-blue-900':
+          'px-6 py-4 text-3xl uppercase group-pressed:-translate-y-[2px] group-pressed:bg-gray-100 group-pressed:text-gray-600 group-current:bg-green-600 group-past:-translate-y-[2px] group-past:bg-blue-100 group-past:text-blue-900':
             isLetterVariant,
         })}
       >

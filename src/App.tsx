@@ -24,7 +24,7 @@ export default function App() {
   const isPicking = state.matches('picking');
 
   return (
-    <>
+    <div className="mx-auto max-w-[480px] space-y-12">
       <Board
         isPlaying={isPlaying}
         current={state.context.current}
@@ -32,7 +32,7 @@ export default function App() {
         onToggleEnabled={handleToggleEnabled}
       />
 
-      <div className="mt-4 flex justify-end space-x-4">
+      <div className="grid grid-cols-2 gap-4">
         <Button disabled={isPicking} onClick={() => send('RESET')}>
           Reset
         </Button>
@@ -46,6 +46,6 @@ export default function App() {
         )}
         {isPlaying && <Button onClick={() => send('PICK')}>Pick next</Button>}
       </div>
-    </>
+    </div>
   );
 }
