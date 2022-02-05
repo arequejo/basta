@@ -26,6 +26,7 @@ export default function App() {
   return (
     <>
       <Board
+        isPlaying={isPlaying}
         current={state.context.current}
         board={state.context.board}
         onToggleEnabled={handleToggleEnabled}
