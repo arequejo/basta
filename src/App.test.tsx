@@ -19,26 +19,30 @@ describe('<App />', () => {
   it('can play the game', () => {
     render(<App />);
 
-    const currentCharacter = screen.getByTestId('current-character');
+    // const currentCharacter = screen.getByTestId('current-character');
     const resetButton = screen.getByRole('button', { name: /reset/i });
     const startButton = screen.getByRole('button', { name: /start/i });
 
-    expect(currentCharacter).toHaveTextContent('--');
     userEvent.click(startButton);
     expect(resetButton).toBeDisabled();
     vi.runOnlyPendingTimers();
     expect(startButton).not.toBeInTheDocument();
     expect(resetButton).toBeEnabled();
-    expect(currentCharacter).toHaveTextContent(/^a$/i);
+    expect(screen.getByRole('button', { name: /^a$/i })).toHaveAttribute(
+      'data-current',
+      'true'
+    );
 
     const pickNextButton = screen.getByRole('button', { name: /pick next/i });
     userEvent.click(pickNextButton); // 'b'
     vi.runOnlyPendingTimers();
     expect(pickNextButton).not.toBeInTheDocument();
-    expect(currentCharacter).toHaveTextContent(/^b$/i);
+    expect(screen.getByRole('button', { name: /^b$/i })).toHaveAttribute(
+      'data-current',
+      'true'
+    );
 
     userEvent.click(resetButton);
-    expect(currentCharacter).toHaveTextContent('--');
     expect(screen.getByRole('button', { name: /start/i })).toBeInTheDocument();
   });
 
