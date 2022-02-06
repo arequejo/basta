@@ -15,7 +15,10 @@ export default function Board({
   onToggleEnabled,
 }: BoardProps) {
   return (
-    <main className="grid grid-cols-5 gap-6" data-testid="board">
+    <main
+      className="grid grid-cols-4 gap-6 xs:grid-cols-5 xs:gap-4"
+      data-testid="board"
+    >
       {board.map(({ character, isEnabled, hasBeenPicked }) => (
         <Button
           key={character}

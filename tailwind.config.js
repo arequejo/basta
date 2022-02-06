@@ -1,9 +1,13 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
 const plugin = require('tailwindcss/plugin');
 
 module.exports = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    extend: {},
+    screens: {
+      xs: '480px',
+      ...defaultTheme.screens,
+    },
   },
   plugins: [
     plugin(function ({ addVariant }) {
