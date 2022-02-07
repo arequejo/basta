@@ -1,5 +1,6 @@
 import React from 'react';
 import { useMachine } from '@xstate/react';
+import { HeartIcon } from '@heroicons/react/solid';
 import { Board, Button } from './components';
 import boardMachine from './machine';
 import { Character } from './types';
@@ -46,6 +47,16 @@ export default function App() {
         )}
         {isPlaying && <Button onClick={() => send('PICK')}>Pick next</Button>}
       </div>
+
+      <footer>
+        <p className="text-center">
+          Made with <HeartIcon className="inline-block h-5 w-5 text-red-500" />{' '}
+          by{' '}
+          <a className="underline" href="https://requejo.dev" target="_blank">
+            Reque
+          </a>
+        </p>
+      </footer>
     </div>
   );
 }
