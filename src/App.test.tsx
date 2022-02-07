@@ -1,3 +1,4 @@
+import { vi, describe, it, beforeEach } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
