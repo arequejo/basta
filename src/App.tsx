@@ -1,12 +1,12 @@
 import React from 'react';
 import { useMachine } from '@xstate/react';
 import { HeartIcon } from '@heroicons/react/solid';
+import machine from './machine';
 import { Board, Button } from './components';
-import boardMachine from './machine';
 import { Character } from './types';
 
 export default function App() {
-  const [state, send] = useMachine(boardMachine);
+  const [state, send] = useMachine(machine);
 
   const handleToggleEnabled = React.useCallback(
     (character: Character) => {
@@ -20,9 +20,9 @@ export default function App() {
     [state.context.board]
   );
 
-  const isNewGame = state.matches('new');
-  const isPlaying = state.matches('playing');
-  const isPicking = state.matches('picking');
+  const isNewGame = state.value === 'new';
+  const isPlaying = state.value === 'playing';
+  const isPicking = state.value === 'picking';
 
   return (
     <div className="mx-auto max-w-[480px] space-y-12">

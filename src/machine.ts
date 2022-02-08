@@ -2,47 +2,29 @@ import { assign, createMachine } from 'xstate';
 import { initBoard, pickNextCharacter } from './utils/board';
 import { Character, Letter } from './types';
 
-type BoardContext = {
+type Context = {
   board: Letter[];
   current: Character | null;
 };
 
-type BoardEvent =
+type Event =
   | { type: 'START' }
   | { type: 'RESET' }
   | { type: 'END' }
   | { type: 'PICK' }
   | { type: 'SELECT'; character: Character };
 
-const resetBoard = assign<BoardContext, BoardEvent>({
-  board: initBoard(),
-  current: null,
-});
-
-/**
- * TODO
- * - Add delayed `picking` state. The tests hang with `vi.useFakeTimers()` and
- * can't get them to play nice without actually waiting for the delay to
- * complete. Add such state once those issues have been resolved.
- */
-const boardMachine = createMachine<BoardContext, BoardEvent>(
+const boardMachine = createMachine(
   {
+    tsTypes: {} as import('./machine.typegen').Typegen0,
+    schema: { context: {} as Context, events: {} as Event },
     id: 'board',
     initial: 'new',
     context: { board: initBoard(), current: null },
     states: {
       new: {
         on: {
-          SELECT: {
-            actions: assign({
-              board: (context, event) =>
-                context.board.map((letter) =>
-                  letter.character === event.character
-                    ? { ...letter, isEnabled: !letter.isEnabled }
-                    : letter
-                ),
-            }),
-          },
+          SELECT: { actions: 'toggleSelection' },
           RESET: { actions: 'resetBoard' },
           START: { target: 'picking' },
         },
@@ -56,16 +38,10 @@ const boardMachine = createMachine<BoardContext, BoardEvent>(
         always: [
           {
             target: 'finished',
-            cond: (context) =>
-              context.board.filter(
-                (letter) => letter.isEnabled && !letter.hasBeenPicked
-              ).length < 2,
+            cond: 'isGameOver',
           },
         ],
-        entry: assign((context) => {
-          const [nextCharacter, newBoard] = pickNextCharacter(context.board);
-          return { board: newBoard, current: nextCharacter };
-        }),
+        entry: 'pickNext',
         on: {
           PICK: { target: 'picking' },
           RESET: { target: 'new', actions: 'resetBoard' },
@@ -79,7 +55,33 @@ const boardMachine = createMachine<BoardContext, BoardEvent>(
     },
   },
   {
-    actions: { resetBoard },
+    actions: {
+      /**
+       * Have to declare an unused context...
+       * https://xstate.js.org/docs/guides/typescript.html#assign-action-behaving-strangely
+       */
+      resetBoard: assign((context) => ({
+        board: initBoard(),
+        current: null,
+      })),
+      toggleSelection: assign((context, event) => ({
+        board: context.board.map((letter) =>
+          letter.character === event.character
+            ? { ...letter, isEnabled: !letter.isEnabled }
+            : letter
+        ),
+      })),
+      pickNext: assign((context) => {
+        const [nextCharacter, newBoard] = pickNextCharacter(context.board);
+        return { board: newBoard, current: nextCharacter };
+      }),
+    },
+    guards: {
+      isGameOver: (context) =>
+        context.board.filter(
+          (letter) => letter.isEnabled && !letter.hasBeenPicked
+        ).length < 2,
+    },
   }
 );
 
