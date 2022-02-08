@@ -5,12 +5,9 @@ export interface Typegen0 {
   eventsCausingActions: {
     toggleSelection: 'SELECT';
     resetBoard: 'RESET';
-    pickNext: 'xstate.after(2000)#board.picking';
+    pickNext: 'xstate.init';
   };
   internalEvents: {
-    'xstate.after(2000)#board.picking': {
-      type: 'xstate.after(2000)#board.picking';
-    };
     '': { type: '' };
     'xstate.init': { type: 'xstate.init' };
   };

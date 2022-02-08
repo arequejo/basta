@@ -1,4 +1,5 @@
 import { assign, createMachine } from 'xstate';
+import { PICK_TIME } from './config';
 import { initBoard, pickNextCharacter } from './utils/board';
 import { Character, Letter } from './types';
 
@@ -31,7 +32,7 @@ const boardMachine = createMachine(
       },
       picking: {
         after: {
-          2000: { target: 'playing' },
+          [PICK_TIME]: { target: 'playing' },
         },
       },
       playing: {
