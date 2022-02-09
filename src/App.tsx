@@ -1,6 +1,10 @@
 import React from 'react';
 import { useMachine } from '@xstate/react';
-import { HeartIcon } from '@heroicons/react/solid';
+import {
+  ArrowSmRightIcon,
+  HeartIcon,
+  RefreshIcon,
+} from '@heroicons/react/solid';
 import machine from './machine';
 import { Board, Button } from './components';
 import { Character } from './types';
@@ -34,18 +38,21 @@ export default function App() {
       />
 
       <div className="grid grid-cols-2 gap-4">
-        <Button disabled={isPicking} onClick={() => send('RESET')}>
-          Reset
+        <Button
+          color="orange"
+          disabled={isPicking}
+          onClick={() => send('RESET')}
+        >
+          Reset <RefreshIcon className="ml-1 inline-block h-5 w-5" />
         </Button>
-        {isNewGame && (
-          <Button
-            disabled={enabledCharactersCount < 2}
-            onClick={() => send('START')}
-          >
-            Start
-          </Button>
-        )}
-        {isPlaying && <Button onClick={() => send('PICK')}>Pick next</Button>}
+        <Button
+          color="green"
+          disabled={isPicking || enabledCharactersCount < 2}
+          onClick={() => send('PICK')}
+        >
+          {isNewGame ? 'Start' : 'Pick next'}{' '}
+          <ArrowSmRightIcon className="ml-1 inline-block h-5 w-5" />
+        </Button>
       </div>
 
       <footer>

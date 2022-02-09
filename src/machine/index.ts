@@ -9,7 +9,6 @@ type Context = {
 };
 
 type Event =
-  | { type: 'START' }
   | { type: 'RESET' }
   | { type: 'END' }
   | { type: 'PICK' }
@@ -27,7 +26,7 @@ const machine = createMachine(
         on: {
           SELECT: { actions: 'toggleSelection' },
           RESET: { actions: 'resetBoard' },
-          START: { target: 'picking' },
+          PICK: { target: 'picking' },
         },
       },
       picking: {

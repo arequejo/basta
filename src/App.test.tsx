@@ -20,38 +20,37 @@ describe('<App />', () => {
   it('can play the game', () => {
     render(<App />);
 
-    // const currentCharacter = screen.getByTestId('current-character');
     const resetButton = screen.getByRole('button', { name: /reset/i });
-    const startButton = screen.getByRole('button', { name: /start/i });
+    const pickButton = screen.getByRole('button', { name: /start/i });
 
-    userEvent.click(startButton);
+    userEvent.click(pickButton);
     expect(resetButton).toBeDisabled();
+    expect(pickButton).toBeDisabled();
     vi.runOnlyPendingTimers();
-    expect(startButton).not.toBeInTheDocument();
     expect(resetButton).toBeEnabled();
+    expect(pickButton).toBeEnabled();
+    expect(pickButton).toHaveTextContent(/next/i);
     expect(screen.getByRole('button', { name: /^a$/i })).toHaveAttribute(
       'data-current',
       'true'
     );
 
-    const pickNextButton = screen.getByRole('button', { name: /pick next/i });
-    userEvent.click(pickNextButton); // 'b'
+    userEvent.click(pickButton); // 'b'
     vi.runOnlyPendingTimers();
-    expect(pickNextButton).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: /^b$/i })).toHaveAttribute(
       'data-current',
       'true'
     );
 
     userEvent.click(resetButton);
-    expect(screen.getByRole('button', { name: /start/i })).toBeInTheDocument();
+    expect(pickButton).toHaveTextContent(/start/i);
   });
 
   it('can perform letters selection before the game starts', () => {
     render(<App />);
 
-    const startButton = screen.getByRole('button', { name: /start/i });
-    expect(startButton).toBeEnabled();
+    const pickButton = screen.getByRole('button', { name: /start/i });
+    expect(pickButton).toBeEnabled();
 
     const aButton = screen.getByRole('button', { name: /^a$/i });
     expect(aButton).toHaveAttribute('aria-pressed', 'false');
@@ -59,7 +58,7 @@ describe('<App />', () => {
     expect(aButton).toHaveAttribute('aria-pressed', 'true');
 
     userEvent.click(screen.getByRole('button', { name: /^b$/i }));
-    expect(startButton).toBeDisabled();
+    expect(pickButton).toBeDisabled();
 
     const resetButton = screen.getByRole('button', { name: /reset/i });
     userEvent.click(resetButton);
