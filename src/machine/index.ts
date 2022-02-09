@@ -1,7 +1,7 @@
 import { assign, createMachine } from 'xstate';
-import { PICK_TIME } from './config';
-import { initBoard, pickNextCharacter } from './utils/board';
-import { Character, Letter } from './types';
+import { PICK_TIME } from '../config';
+import { initBoard, pickNextCharacter } from '../utils/board';
+import { Character, Letter } from '../types';
 
 type Context = {
   board: Letter[];
@@ -15,9 +15,9 @@ type Event =
   | { type: 'PICK' }
   | { type: 'SELECT'; character: Character };
 
-const boardMachine = createMachine(
+const machine = createMachine(
   {
-    tsTypes: {} as import('./machine.typegen').Typegen0,
+    tsTypes: {} as import('./index.typegen').Typegen0,
     schema: { context: {} as Context, events: {} as Event },
     id: 'board',
     initial: 'new',
@@ -86,4 +86,4 @@ const boardMachine = createMachine(
   }
 );
 
-export default boardMachine;
+export default machine;
