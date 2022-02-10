@@ -24,14 +24,28 @@ export default function App() {
     [state.context.board]
   );
 
-  const isNewGame = state.value === 'new';
-  const isPlaying = state.value === 'playing';
-  const isPicking = state.value === 'picking';
+  const hasEnoughCharacters = enabledCharactersCount >= 2;
+  const isNewGame = state.matches('new');
+  const isPlaying = state.matches('playing');
+  const isPicking = state.matches('picking');
+  const isGameOver = state.matches('finished');
 
   return (
     <div className="mx-auto max-w-[480px] space-y-12">
+      <p className="text-center text-lg" data-testid="helper-text">
+        {isNewGame &&
+          hasEnoughCharacters &&
+          'Press the letters to disable them'}
+        {isNewGame &&
+          !hasEnoughCharacters &&
+          'You need to have at least two letters enabled'}
+        {isPicking && 'Picking...'}
+        {isPlaying && 'Go!'}
+        {isGameOver && 'Last letter! Time to count your points'}
+      </p>
+
       <Board
-        isPlaying={isPlaying}
+        disabled={!isNewGame}
         current={state.context.current}
         board={state.context.board}
         onToggleEnabled={handleToggleEnabled}
@@ -43,11 +57,12 @@ export default function App() {
           disabled={isPicking}
           onClick={() => send('RESET')}
         >
-          Reset <RefreshIcon className="ml-1 inline-block h-5 w-5" />
+          {isNewGame ? 'Reset' : 'Start over'}{' '}
+          <RefreshIcon className="ml-1 inline-block h-5 w-5" />
         </Button>
         <Button
           color="green"
-          disabled={isPicking || enabledCharactersCount < 2}
+          disabled={!hasEnoughCharacters || isPicking || isGameOver}
           onClick={() => send('PICK')}
         >
           {isNewGame ? 'Start' : 'Pick next'}{' '}

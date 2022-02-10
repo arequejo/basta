@@ -20,14 +20,19 @@ describe('<App />', () => {
   it('can play the game', () => {
     render(<App />);
 
+    const helperText = screen.getByTestId('helper-text');
     const resetButton = screen.getByRole('button', { name: /reset/i });
     const pickButton = screen.getByRole('button', { name: /start/i });
 
+    expect(helperText).toHaveTextContent(/press the letters to disable them/i);
     userEvent.click(pickButton);
+    expect(helperText).toHaveTextContent(/picking/i);
     expect(resetButton).toBeDisabled();
     expect(pickButton).toBeDisabled();
     vi.runOnlyPendingTimers();
+    expect(helperText).toHaveTextContent(/go/i);
     expect(resetButton).toBeEnabled();
+    expect(resetButton).toHaveTextContent(/start over/i);
     expect(pickButton).toBeEnabled();
     expect(pickButton).toHaveTextContent(/next/i);
     expect(screen.getByRole('button', { name: /^a$/i })).toHaveAttribute(
@@ -43,6 +48,8 @@ describe('<App />', () => {
     );
 
     userEvent.click(resetButton);
+    expect(helperText).toHaveTextContent(/press the letters to disable them/i);
+    expect(resetButton).toHaveTextContent(/reset/i);
     expect(pickButton).toHaveTextContent(/start/i);
   });
 

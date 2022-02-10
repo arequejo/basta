@@ -2,14 +2,14 @@ import { Button } from '.';
 import { Character, Letter } from '../types';
 
 type BoardProps = {
-  isPlaying: boolean;
+  disabled: boolean;
   current: Character | null;
   board: Letter[];
   onToggleEnabled: (character: Character) => void;
 };
 
 export default function Board({
-  isPlaying,
+  disabled,
   current,
   board,
   onToggleEnabled,
@@ -26,7 +26,7 @@ export default function Board({
           data-current={character === current}
           data-past={hasBeenPicked && character !== current}
           aria-pressed={!isEnabled}
-          disabled={isPlaying}
+          disabled={disabled}
           onClick={() => onToggleEnabled(character)}
         >
           {character}
