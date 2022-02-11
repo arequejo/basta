@@ -11,6 +11,8 @@ import { Character } from './types';
 
 export default function App() {
   const [state, send] = useMachine(machine);
+  const resetButtonRef = React.useRef<HTMLButtonElement | null>(null);
+  const pickButtonRef = React.useRef<HTMLButtonElement | null>(null);
 
   const handleToggleEnabled = React.useCallback(
     (character: Character) => {
@@ -30,6 +32,14 @@ export default function App() {
   const isPlaying = state.matches('playing');
   const isPicking = state.matches('picking');
   const isGameOver = state.matches('finished');
+
+  // Restore focus after picking
+  React.useEffect(() => {
+    if (!state.history?.matches('picking')) return;
+    isGameOver
+      ? resetButtonRef.current?.focus()
+      : pickButtonRef.current?.focus();
+  }, [isGameOver, state.history]);
 
   return (
     <div className="mx-auto max-w-[480px] space-y-12">
@@ -53,13 +63,13 @@ export default function App() {
       />
 
       <div className="grid grid-cols-2 gap-4">
-        {/* FIXME focus restore seems to be broken with this approach */}
         <StartOver
           open={isConfirmingReset}
           onCancel={() => send('CANCEL_RESET')}
           onConfirm={() => send('CONFIRM_RESET')}
         >
           <Button
+            ref={resetButtonRef}
             color="orange"
             disabled={isPicking}
             onClick={() => (isNewGame ? send('CLEAR') : send('RESET'))}
@@ -70,6 +80,7 @@ export default function App() {
         </StartOver>
 
         <Button
+          ref={pickButtonRef}
           color="green"
           disabled={!hasEnoughCharacters || isPicking || isGameOver}
           onClick={() => send('PICK')}

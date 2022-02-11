@@ -79,4 +79,7 @@ describe('<App />', () => {
 
   // There's an error coming from radix that causes the test to fail
   it.todo('shows an alert dialog when trying to start over midgame');
+
+  // The button is focused after picking, even if it's not true in the browser
+  it.todo('restores focus properly after picking');
 });
