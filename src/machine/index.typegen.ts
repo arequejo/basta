@@ -4,8 +4,7 @@ export interface Typegen0 {
   '@@xstate/typegen': true;
   eventsCausingActions: {
     toggleSelection: 'SELECT';
-    resetBoard: 'RESET';
-    pickNext: 'xstate.init';
+    resetBoard: 'CLEAR' | 'CONFIRM_RESET' | 'RESET';
   };
   internalEvents: {
     '': { type: '' };
@@ -23,6 +22,6 @@ export interface Typegen0 {
     isGameOver: '';
   };
   eventsCausingDelays: {};
-  matchesStates: 'new' | 'picking' | 'playing' | 'finished';
+  matchesStates: 'new' | 'confirmReset' | 'picking' | 'playing' | 'finished';
   tags: never;
 }

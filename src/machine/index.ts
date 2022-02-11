@@ -9,7 +9,10 @@ type Context = {
 };
 
 type Event =
+  | { type: 'CONFIRM_RESET' }
+  | { type: 'CANCEL_RESET' }
   | { type: 'RESET' }
+  | { type: 'CLEAR' }
   | { type: 'END' }
   | { type: 'PICK' }
   | { type: 'SELECT'; character: Character };
@@ -25,13 +28,19 @@ const machine = createMachine(
       new: {
         on: {
           SELECT: { actions: 'toggleSelection' },
-          RESET: { actions: 'resetBoard' },
+          CLEAR: { actions: 'resetBoard' },
           PICK: { target: 'picking' },
+        },
+      },
+      confirmReset: {
+        on: {
+          CANCEL_RESET: { target: 'playing' },
+          CONFIRM_RESET: { target: 'new', actions: 'resetBoard' },
         },
       },
       picking: {
         after: {
-          [PICK_TIME]: { target: 'playing' },
+          [PICK_TIME]: { target: 'playing', actions: 'pickNext' },
         },
       },
       playing: {
@@ -41,10 +50,9 @@ const machine = createMachine(
             cond: 'isGameOver',
           },
         ],
-        entry: 'pickNext',
         on: {
+          RESET: { target: 'confirmReset' },
           PICK: { target: 'picking' },
-          RESET: { target: 'new', actions: 'resetBoard' },
         },
       },
       finished: {
@@ -71,6 +79,10 @@ const machine = createMachine(
             : letter
         ),
       })),
+      /**
+       * TS error comes from the fact that the typegen doesn't seem to work
+       * with the dynamic key as delay.
+       */
       pickNext: assign((context) => {
         const [nextCharacter, newBoard] = pickNextCharacter(context.board);
         return { board: newBoard, current: nextCharacter };
