@@ -6,7 +6,7 @@ import {
   RefreshIcon,
 } from '@heroicons/react/solid';
 import machine from './machine';
-import { Board, Button } from './components';
+import { Board, Button, StartOver } from './components';
 import { Character } from './types';
 
 export default function App() {
@@ -26,6 +26,7 @@ export default function App() {
 
   const hasEnoughCharacters = enabledCharactersCount >= 2;
   const isNewGame = state.matches('new');
+  const isConfirmingReset = state.matches('confirmReset');
   const isPlaying = state.matches('playing');
   const isPicking = state.matches('picking');
   const isGameOver = state.matches('finished');
@@ -40,7 +41,7 @@ export default function App() {
           !hasEnoughCharacters &&
           'You need to have at least two letters enabled'}
         {isPicking && 'Picking...'}
-        {isPlaying && 'Go!'}
+        {(isPlaying || isConfirmingReset) && 'Go!'}
         {isGameOver && 'Last letter! Time to count your points'}
       </p>
 
@@ -52,14 +53,22 @@ export default function App() {
       />
 
       <div className="grid grid-cols-2 gap-4">
-        <Button
-          color="orange"
-          disabled={isPicking}
-          onClick={() => send('RESET')}
+        {/* FIXME focus restore seems to be broken with this approach */}
+        <StartOver
+          open={isConfirmingReset}
+          onCancel={() => send('CANCEL_RESET')}
+          onConfirm={() => send('CONFIRM_RESET')}
         >
-          {isNewGame ? 'Reset' : 'Start over'}{' '}
-          <RefreshIcon className="ml-1 inline-block h-5 w-5" />
-        </Button>
+          <Button
+            color="orange"
+            disabled={isPicking}
+            onClick={() => (isNewGame ? send('CLEAR') : send('RESET'))}
+          >
+            {isNewGame ? 'Reset' : 'Start over'}
+            <RefreshIcon className="ml-1 inline-block h-5 w-5" />
+          </Button>
+        </StartOver>
+
         <Button
           color="green"
           disabled={!hasEnoughCharacters || isPicking || isGameOver}

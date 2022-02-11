@@ -76,4 +76,7 @@ describe('<App />', () => {
       expect(characterButton).toHaveAttribute('aria-pressed', 'false');
     });
   });
+
+  // There's an error coming from radix that causes the test to fail
+  it.todo('shows an alert dialog when trying to start over midgame');
 });
