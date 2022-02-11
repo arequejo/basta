@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^1.0.5",
+    "@radix-ui/react-alert-dialog": "^0.1.5",
     "@xstate/react": "^2.0.0",
     "clsx": "^1.1.1",
     "react": "^17.0.2",
