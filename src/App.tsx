@@ -62,7 +62,17 @@ export default function App() {
         onToggleEnabled={handleToggleEnabled}
       />
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="flex flex-col space-y-4">
+        <Button
+          ref={pickButtonRef}
+          color="green"
+          disabled={!hasEnoughCharacters || isPicking || isGameOver}
+          onClick={() => send('PICK')}
+        >
+          {isNewGame ? 'Start' : 'Pick next'}{' '}
+          <ArrowSmRightIcon className="ml-1 inline-block h-5 w-5" />
+        </Button>
+
         <StartOver
           open={isConfirmingReset}
           onCancel={() => send('CANCEL_RESET')}
@@ -78,16 +88,6 @@ export default function App() {
             <RefreshIcon className="ml-1 inline-block h-5 w-5" />
           </Button>
         </StartOver>
-
-        <Button
-          ref={pickButtonRef}
-          color="green"
-          disabled={!hasEnoughCharacters || isPicking || isGameOver}
-          onClick={() => send('PICK')}
-        >
-          {isNewGame ? 'Start' : 'Pick next'}{' '}
-          <ArrowSmRightIcon className="ml-1 inline-block h-5 w-5" />
-        </Button>
       </div>
 
       <footer>
