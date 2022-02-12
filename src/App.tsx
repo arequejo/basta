@@ -42,7 +42,7 @@ export default function App() {
   }, [isGameOver, state.history]);
 
   return (
-    <div className="mx-auto max-w-[480px] space-y-12">
+    <div className="mx-auto max-w-[480px] space-y-8">
       <p className="text-center text-lg" data-testid="helper-text">
         {isNewGame &&
           hasEnoughCharacters &&
