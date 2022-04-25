@@ -6,7 +6,7 @@ import {
   RefreshIcon,
 } from '@heroicons/react/solid';
 import machine from './machine';
-import { Board, Button, StartOver } from './components';
+import { Board, Button, PickedCharacter, StartOver } from './components';
 import { Character } from './types';
 
 export default function App() {
@@ -31,6 +31,7 @@ export default function App() {
   const isConfirmingReset = state.matches('confirmReset');
   const isPlaying = state.matches('playing');
   const isPicking = state.matches('picking');
+  const hasJustBeenPicked = state.matches('picked');
   const isGameOver = state.matches('finished');
 
   // Restore focus after picking
@@ -42,63 +43,69 @@ export default function App() {
   }, [isGameOver, state.history]);
 
   return (
-    <div className="mx-auto max-w-[480px] space-y-8">
-      <p className="text-center text-lg" data-testid="helper-text">
-        {isNewGame &&
-          hasEnoughCharacters &&
-          'Press the letters to disable them'}
-        {isNewGame &&
-          !hasEnoughCharacters &&
-          'You need to have at least two letters enabled'}
-        {isPicking && 'Picking...'}
-        {(isPlaying || isConfirmingReset) && 'Go!'}
-        {isGameOver && 'Last letter! Time to count your points'}
-      </p>
+    <>
+      <div className="mx-auto max-w-[480px] space-y-8">
+        <p className="text-center text-lg" data-testid="helper-text">
+          {isNewGame &&
+            hasEnoughCharacters &&
+            'Press the letters to disable them'}
+          {isNewGame &&
+            !hasEnoughCharacters &&
+            'You need to have at least two letters enabled'}
+          {isPicking && 'Picking...'}
+          {(isPlaying || hasJustBeenPicked || isConfirmingReset) && 'Go!'}
+          {isGameOver && 'Last letter! Time to count your points'}
+        </p>
 
-      <Board
-        disabled={!isNewGame}
-        current={state.context.current}
-        board={state.context.board}
-        onToggleEnabled={handleToggleEnabled}
-      />
+        <Board
+          disabled={!isNewGame}
+          current={state.context.current}
+          board={state.context.board}
+          onToggleEnabled={handleToggleEnabled}
+        />
 
-      <div className="flex flex-col space-y-4">
-        <Button
-          ref={pickButtonRef}
-          color="green"
-          disabled={!hasEnoughCharacters || isPicking || isGameOver}
-          onClick={() => send('PICK')}
-        >
-          {isNewGame ? 'Start' : 'Pick next'}{' '}
-          <ArrowSmRightIcon className="ml-1 inline-block h-5 w-5" />
-        </Button>
-
-        <StartOver
-          open={isConfirmingReset}
-          onCancel={() => send('CANCEL_RESET')}
-          onConfirm={() => send('CONFIRM_RESET')}
-        >
+        <div className="flex flex-col space-y-4">
           <Button
-            ref={resetButtonRef}
-            color="orange"
-            disabled={isPicking}
-            onClick={() => (isNewGame ? send('CLEAR') : send('RESET'))}
+            ref={pickButtonRef}
+            color="green"
+            disabled={!hasEnoughCharacters || isPicking || isGameOver}
+            onClick={() => send('PICK')}
           >
-            {isNewGame ? 'Reset' : 'Start over'}
-            <RefreshIcon className="ml-1 inline-block h-5 w-5" />
+            {isNewGame ? 'Start' : 'Pick next'}{' '}
+            <ArrowSmRightIcon className="ml-1 inline-block h-5 w-5" />
           </Button>
-        </StartOver>
+
+          <StartOver
+            open={isConfirmingReset}
+            onCancel={() => send('CANCEL_RESET')}
+            onConfirm={() => send('CONFIRM_RESET')}
+          >
+            <Button
+              ref={resetButtonRef}
+              color="orange"
+              disabled={isPicking}
+              onClick={() => (isNewGame ? send('CLEAR') : send('RESET'))}
+            >
+              {isNewGame ? 'Reset' : 'Start over'}
+              <RefreshIcon className="ml-1 inline-block h-5 w-5" />
+            </Button>
+          </StartOver>
+        </div>
+
+        <footer>
+          <p className="text-center">
+            Made with{' '}
+            <HeartIcon className="inline-block h-5 w-5 text-red-500" /> by{' '}
+            <a className="underline" href="https://requejo.dev" target="_blank">
+              Reque
+            </a>
+          </p>
+        </footer>
       </div>
 
-      <footer>
-        <p className="text-center">
-          Made with <HeartIcon className="inline-block h-5 w-5 text-red-500" />{' '}
-          by{' '}
-          <a className="underline" href="https://requejo.dev" target="_blank">
-            Reque
-          </a>
-        </p>
-      </footer>
-    </div>
+      {hasJustBeenPicked && (
+        <PickedCharacter character={state.context.current} />
+      )}
+    </>
   );
 }
