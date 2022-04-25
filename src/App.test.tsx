@@ -24,11 +24,17 @@ describe('<App />', () => {
     const resetButton = screen.getByRole('button', { name: /reset/i });
     const pickButton = screen.getByRole('button', { name: /start/i });
 
+    // Assert initial state of game before the timer runs
     expect(helperText).toHaveTextContent(/press the letters to disable them/i);
     userEvent.click(pickButton);
     expect(helperText).toHaveTextContent(/picking/i);
     expect(resetButton).toBeDisabled();
     expect(pickButton).toBeDisabled();
+
+    // Assert new state after the first letter has been selected
+    vi.runOnlyPendingTimers();
+    expect(screen.getByTestId('picked-letter')).toHaveTextContent(/^a$/i);
+
     vi.runOnlyPendingTimers();
     expect(helperText).toHaveTextContent(/go/i);
     expect(resetButton).toBeEnabled();
@@ -42,11 +48,14 @@ describe('<App />', () => {
 
     userEvent.click(pickButton); // 'b'
     vi.runOnlyPendingTimers();
+    expect(screen.getByTestId('picked-letter')).toHaveTextContent(/^b$/i);
+    vi.runOnlyPendingTimers();
     expect(screen.getByRole('button', { name: /^b$/i })).toHaveAttribute(
       'data-current',
       'true'
     );
 
+    // Reset game and assert initial state has been restored
     userEvent.click(resetButton);
     expect(helperText).toHaveTextContent(/press the letters to disable them/i);
     expect(resetButton).toHaveTextContent(/reset/i);
