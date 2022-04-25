@@ -54,7 +54,7 @@ export default function App() {
             'You need to have at least two letters enabled'}
           {isPicking && 'Picking...'}
           {(isPlaying || hasJustBeenPicked || isConfirmingReset) && 'Go!'}
-          {isGameOver && 'Last letter! Time to count your points'}
+          {isGameOver && 'Time to count your points!'}
         </p>
 
         <Board
