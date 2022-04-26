@@ -1,6 +1,6 @@
 # Basta
 
-Based on the traditional Mexican game
+Based on the traditional Mexican game, learn how to play it [here](https://www.spanishplayground.net/spanish-game-children-basta).
 
 ## Built with
 

@@ -83,10 +83,6 @@ const machine = createMachine(
             : letter
         ),
       })),
-      /**
-       * TS error comes from the fact that the typegen doesn't seem to work
-       * with the dynamic key as delay.
-       */
       pickNext: assign((context) => {
         const [nextCharacter, newBoard] = pickNextCharacter(context.board);
         return { board: newBoard, current: nextCharacter };
