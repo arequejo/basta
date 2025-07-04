@@ -5,12 +5,18 @@ import {
   HeartIcon,
   RefreshIcon,
 } from '@heroicons/react/solid';
-import machine from './machine';
+import { machine } from './machine';
 import { Board, Button, PickedCharacter, StartOver } from './components';
 import { Character } from './types';
 
 export default function App() {
-  const [state, send] = useMachine(machine);
+  const [snapshot, send] = useMachine(machine);
+  const prevSnapshotRef = React.useRef(snapshot);
+
+  React.useEffect(() => {
+    prevSnapshotRef.current = snapshot;
+  }, [snapshot]);
+
   const resetButtonRef = React.useRef<HTMLButtonElement | null>(null);
   const pickButtonRef = React.useRef<HTMLButtonElement | null>(null);
 
@@ -22,25 +28,25 @@ export default function App() {
   );
 
   const enabledCharactersCount = React.useMemo(
-    () => state.context.board.filter((letter) => letter.isEnabled).length,
-    [state.context.board]
+    () => snapshot.context.board.filter((letter) => letter.isEnabled).length,
+    [snapshot.context.board]
   );
 
   const hasEnoughCharacters = enabledCharactersCount >= 2;
-  const isNewGame = state.matches('new');
-  const isConfirmingReset = state.matches('confirmReset');
-  const isPlaying = state.matches('playing');
-  const isPicking = state.matches('picking');
-  const hasJustBeenPicked = state.matches('picked');
-  const isGameOver = state.matches('finished');
+  const isNewGame = snapshot.matches('new');
+  const isConfirmingReset = snapshot.matches('confirmReset');
+  const isPlaying = snapshot.matches('playing');
+  const isPicking = snapshot.matches('picking');
+  const hasJustBeenPicked = snapshot.matches('picked');
+  const isGameOver = snapshot.matches('finished');
 
   // Restore focus after picking
   React.useEffect(() => {
-    if (!state.history?.matches('picking')) return;
+    if (!prevSnapshotRef.current.matches('picking')) return;
     isGameOver
       ? resetButtonRef.current?.focus()
       : pickButtonRef.current?.focus();
-  }, [isGameOver, state.history]);
+  }, [isGameOver]);
 
   return (
     <>
@@ -59,8 +65,8 @@ export default function App() {
 
         <Board
           disabled={!isNewGame}
-          current={state.context.current}
-          board={state.context.board}
+          current={snapshot.context.current}
+          board={snapshot.context.board}
           onToggleEnabled={handleToggleEnabled}
         />
 
@@ -69,7 +75,7 @@ export default function App() {
             ref={pickButtonRef}
             color="green"
             disabled={!hasEnoughCharacters || isPicking || isGameOver}
-            onClick={() => send('PICK')}
+            onClick={() => send({ type: 'PICK' })}
           >
             {isNewGame ? 'Start' : 'Pick next'}{' '}
             <ArrowSmRightIcon className="ml-1 inline-block h-5 w-5" />
@@ -77,14 +83,16 @@ export default function App() {
 
           <StartOver
             open={isConfirmingReset}
-            onCancel={() => send('CANCEL_RESET')}
-            onConfirm={() => send('CONFIRM_RESET')}
+            onCancel={() => send({ type: 'CANCEL_RESET' })}
+            onConfirm={() => send({ type: 'CONFIRM_RESET' })}
           >
             <Button
               ref={resetButtonRef}
               color="orange"
               disabled={isPicking}
-              onClick={() => (isNewGame ? send('CLEAR') : send('RESET'))}
+              onClick={() =>
+                isNewGame ? send({ type: 'CLEAR' }) : send({ type: 'RESET' })
+              }
             >
               {isNewGame ? 'Reset' : 'Start over'}
               <RefreshIcon className="ml-1 inline-block h-5 w-5" />
@@ -104,7 +112,7 @@ export default function App() {
       </div>
 
       {hasJustBeenPicked && (
-        <PickedCharacter character={state.context.current} />
+        <PickedCharacter character={snapshot.context.current!} />
       )}
     </>
   );

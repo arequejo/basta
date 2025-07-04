@@ -8,17 +8,18 @@
     "preview": "vite preview",
     "prepare": "husky install",
     "format": "prettier --ignore-path .gitignore --write .",
+    "typecheck": "tsc",
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
   "dependencies": {
     "@heroicons/react": "^1.0.5",
     "@radix-ui/react-alert-dialog": "^0.1.5",
-    "@xstate/react": "^2.0.0",
+    "@xstate/react": "^6.0.0",
     "clsx": "^1.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "xstate": "^4.29.0"
+    "xstate": "^5.20.0"
   },
   "devDependencies": {
     "@requejo/prettier-config": "^1.1.0",
@@ -37,7 +38,7 @@
     "prettier": "^2.5.1",
     "prettier-plugin-tailwindcss": "^0.1.5",
     "tailwindcss": "^3.0.13",
-    "typescript": "^4.4.4",
+    "typescript": "^5.8.3",
     "vite": "^2.9.5",
     "vitest": "^0.9.3"
   },
