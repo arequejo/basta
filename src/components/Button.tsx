@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import clsx from 'clsx';
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -10,7 +10,7 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
  * Pushable button based on Josh W Comeau's 3D MVP button.
  * @see https://www.joshwcomeau.com/animation/3d-button/#our-strategy
  */
-export default React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   { variant = 'normal', color, children, ...props },
   forwardedRef
 ) {
@@ -48,3 +48,5 @@ export default React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(
     </button>
   );
 });
+
+export { Button };

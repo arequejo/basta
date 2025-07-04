@@ -1,6 +1,6 @@
+import * as React from 'react';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
-import React from 'react';
-import { Button } from '.';
+import { Button } from './Button.tsx';
 
 type StartOverDialogProps = {
   open: boolean;
@@ -13,7 +13,7 @@ type StartOverDialogProps = {
  * Although we could have our own abstraction on top of the AlertDialog, this
  * is the only alert dialog in our app, so not worth the over-abstraction atm.
  */
-export default function StartOverDialog({
+export function StartOverDialog({
   open,
   onCancel,
   onConfirm,

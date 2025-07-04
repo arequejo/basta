@@ -1,6 +1,6 @@
+import type { Character, Letter } from './types.ts';
 import { assign, setup } from 'xstate';
-import { initBoard, pickNextCharacter } from './utils/board';
-import { Character, Letter } from './types';
+import { initBoard, pickNextCharacter } from './utils/board.ts';
 
 export const machine = setup({
   types: {

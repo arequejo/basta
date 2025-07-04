@@ -1,3 +1,4 @@
+import type { Character } from './types.ts';
 import React from 'react';
 import { useMachine } from '@xstate/react';
 import {
@@ -5,9 +6,11 @@ import {
   HeartIcon,
   RefreshIcon,
 } from '@heroicons/react/solid';
-import { machine } from './machine';
-import { Board, Button, PickedCharacter, StartOver } from './components';
-import { Character } from './types';
+import { machine } from './machine.ts';
+import { Board } from './components/Board.tsx';
+import { Button } from './components/Button.tsx';
+import { PickedCharacter } from './components/PickedCharacter.tsx';
+import { StartOverDialog } from './components/StartOverDialog.tsx';
 
 export default function App() {
   const [snapshot, send] = useMachine(machine);
@@ -82,7 +85,7 @@ export default function App() {
             <ArrowSmRightIcon className="ml-1 inline-block h-5 w-5" />
           </Button>
 
-          <StartOver
+          <StartOverDialog
             open={isConfirmingReset}
             onCancel={() => send({ type: 'CANCEL_RESET' })}
             onConfirm={() => send({ type: 'CONFIRM_RESET' })}
@@ -99,7 +102,7 @@ export default function App() {
               {isNewGame ? 'Reset' : 'Start over'}
               <RefreshIcon className="ml-1 inline-block h-5 w-5" />
             </Button>
-          </StartOver>
+          </StartOverDialog>
         </div>
 
         <footer>

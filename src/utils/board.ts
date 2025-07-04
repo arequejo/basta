@@ -1,6 +1,6 @@
-import { characters } from './alphabet';
-import { getRandomNumber } from './random';
-import { Character, Letter } from '../types';
+import type { Character, Letter } from '../types.ts';
+import { characters } from './alphabet.ts';
+import { getRandomNumber } from './random.ts';
 
 export function initBoard(): Letter[] {
   return characters.map((character) => ({

@@ -1,6 +1,6 @@
 import { vi, test, beforeEach, expect } from 'vitest';
 import { render } from 'vitest-browser-react';
-import App from './App';
+import App from './App.tsx';
 
 vi.mock('./utils/alphabet.ts', () => ({
   characters: ['a', 'b', 'c'],

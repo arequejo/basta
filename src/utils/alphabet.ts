@@ -1,6 +1,4 @@
-import { Character } from '../types';
-
-export const characters: Character[] = [
+export const characters = [
   'a',
   'b',
   'c',
@@ -27,4 +25,4 @@ export const characters: Character[] = [
   'x',
   'y',
   'z',
-];
+] as const;

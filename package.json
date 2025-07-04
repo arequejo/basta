@@ -8,8 +8,10 @@
     "preview": "vite preview",
     "prepare": "husky install",
     "format": "prettier --ignore-path .gitignore --write .",
-    "typecheck": "tsc",
-    "test": "vitest"
+    "typecheck": "tsc -b",
+    "test": "vitest --run",
+    "test:watch": "vitest",
+    "test:headless": "npm run test -- --browser.headless"
   },
   "dependencies": {
     "@heroicons/react": "^1.0.5",
@@ -43,7 +45,7 @@
   "lint-staged": {
     "*.+(js|jsx|ts|tsx|json|css|scss)": [
       "prettier --write",
-      "vitest related --run"
+      "vitest related --run --browser.headless"
     ]
   }
 }

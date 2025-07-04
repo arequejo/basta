@@ -1,5 +1,5 @@
-import { Button } from '.';
-import { Character, Letter } from '../types';
+import type { Character, Letter } from '../types.ts';
+import { Button } from './Button.tsx';
 
 type BoardProps = {
   disabled: boolean;
@@ -8,7 +8,7 @@ type BoardProps = {
   onToggleEnabled: (character: Character) => void;
 };
 
-export default function Board({
+export function Board({
   disabled,
   current,
   board,
