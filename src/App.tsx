@@ -76,6 +76,7 @@ export default function App() {
             color="green"
             disabled={!hasEnoughCharacters || isPicking || isGameOver}
             onClick={() => send({ type: 'PICK' })}
+            data-testid="primary-button"
           >
             {isNewGame ? 'Start' : 'Pick next'}{' '}
             <ArrowSmRightIcon className="ml-1 inline-block h-5 w-5" />
@@ -93,6 +94,7 @@ export default function App() {
               onClick={() =>
                 isNewGame ? send({ type: 'CLEAR' }) : send({ type: 'RESET' })
               }
+              data-testid="secondary-button"
             >
               {isNewGame ? 'Reset' : 'Start over'}
               <RefreshIcon className="ml-1 inline-block h-5 w-5" />
