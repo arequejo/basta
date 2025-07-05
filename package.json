@@ -30,7 +30,6 @@
     "@vitejs/plugin-react": "^4.6.0",
     "@vitest/browser": "^3.2.4",
     "husky": "^7.0.4",
-    "jsdom": "^19.0.0",
     "lint-staged": "^12.1.7",
     "playwright": "^1.53.2",
     "prettier": "^3.6.2",
