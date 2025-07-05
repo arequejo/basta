@@ -1,3 +1,12 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@theme {
+  --breakpoint-xs: 480px;
+}
+
+@custom-variant pressed (&:where(button[aria-pressed="true"]));
+@custom-variant group-pressed (&:where(button[aria-pressed="true"] *));
+@custom-variant current (&:where(button[data-current="true"]));
+@custom-variant group-current (&:where(button[data-current="true"] *));
+@custom-variant past (&:where(button[data-past="true"]));
+@custom-variant group-past (&:where(button[data-past="true"] *));

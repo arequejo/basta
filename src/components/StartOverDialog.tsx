@@ -25,7 +25,7 @@ export function StartOverDialog({
 
       <AlertDialog.Portal>
         <AlertDialog.Overlay className="fixed inset-0 bg-black/75" />
-        <AlertDialog.Content className="fixed top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] rounded bg-white p-6">
+        <AlertDialog.Content className="fixed top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] rounded-sm bg-white p-6">
           <AlertDialog.Title className="text-lg">
             Do you really want to start over?
           </AlertDialog.Title>
